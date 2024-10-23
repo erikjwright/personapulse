@@ -1,71 +1,30 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from 'react';
-import * as tf from '@tensorflow/tfjs';
+import Link from "next/link";
 
-const topics = ['sports', 'technology', 'fashion'];
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+
+const products = [
+  { id: 1, name: "Laptop", price: 1000, description: "High-performance laptop" },
+  { id: 2, name: "Headphones", price: 200, description: "Noise-cancelling headphones" },
+  { id: 3, name: "Coffee Maker", price: 150, description: "Brew the perfect cup" },
+  { id: 4, name: "Running Shoes", price: 120, description: "Comfort and durability" },
+];
 
 export default function Home() {
-  const [userTopic, setUserTopic] = useState<string | null>(null);
-  const [recommendedContent, setRecommendedContent] = useState<string[]>([]);
-
-  // Mock training data based on user preferences
-  const trainingData = tf.tensor2d([
-    [1, 0, 0], // sports
-    [0, 1, 0], // technology
-    [0, 0, 1], // fashion
-  ]);
-
-  const outputData = tf.tensor2d([
-    [1], // sports
-    [0], // technology
-    [2], // fashion
-  ]);
-
-  const model = tf.sequential();
-  model.add(tf.layers.dense({ inputShape: [3], units: 3, activation: 'softmax' }));
-  model.compile({ loss: 'meanSquaredError', optimizer: 'adam' });
-
-  useEffect(() => {
-    model.fit(trainingData, outputData, { epochs: 50 }).then(() => {
-      console.log('Model trained');
-    });
-  }, [model, trainingData, outputData]);
-
-  const handleTopicClick = async (topic: string) => {
-    const userInput = tf.tensor2d([topics.map(t => (t === topic ? 1 : 0))]);
-    const prediction = model.predict(userInput) as tf.Tensor;
-
-    // Simulate content recommendation based on the topic
-    const recommendations = topics.filter((_, index) => {
-      const predictedIndex = prediction.argMax(1).dataSync()[0];
-      return index === predictedIndex;
-    });
-
-    setUserTopic(topic);
-    setRecommendedContent(recommendations);
-  };
-
   return (
-    <div>
-      <h1>AI-Powered Personalization</h1>
-      <p>Select your preferred content topic:</p>
-      {topics.map((topic) => (
-        <button key={topic} type="button" onClick={() => handleTopicClick(topic)}>
-          {topic}
-        </button>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+      {products.map((product) => (
+        <Card key={product.id} className="p-4">
+          <h2 className="text-xl font-semibold">{product.name}</h2>
+          <p>{product.description}</p>
+          <p className="text-lg font-bold">${product.price}</p>
+          <Link href={`/product/${product.id}`}>
+            <Button className="mt-4">View Details</Button>
+          </Link>
+        </Card>
       ))}
-
-      {userTopic && (
-        <div>
-          <h2>Recommended content for "{userTopic}"</h2>
-          <ul>
-            {recommendedContent.map((content) => (
-              <li key={content}>{content} articles</li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 }
