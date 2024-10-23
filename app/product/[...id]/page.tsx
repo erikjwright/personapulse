@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { Button } from "@/components/ui/button";
