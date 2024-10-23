@@ -1,5 +1,5 @@
 import * as tf from "@tensorflow/tfjs";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Card } from "@/components/ui/card";
@@ -14,8 +14,7 @@ const products = [
 const productCategories = ["Electronics", "Accessories", "Home Appliances", "Sports"];
 
 export default function ProductDetail() {
-  const router = useRouter();
-  const { id } = router.query;
+  const { id } = useParams();
   const [recommendedProducts, setRecommendedProducts] = useState<{ id: number; name: string; category: string; price: number; }[]>([]);
 
   const product = products.find((p) => p.id === Number.parseInt(id as string));
