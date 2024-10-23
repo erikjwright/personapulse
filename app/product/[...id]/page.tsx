@@ -1,3 +1,5 @@
+"use client"
+
 import * as tf from "@tensorflow/tfjs";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
