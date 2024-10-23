@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { Button } from "@/components/ui/button";
-import { Card} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import { useParams } from "next/navigation"; // Import useParams
 
 const products = [
   { id: 1, name: "Laptop", category: "Electronics", price: 1000 },
@@ -14,8 +15,9 @@ const products = [
 
 const productCategories = ["Electronics", "Accessories", "Home Appliances", "Sports"];
 
-export default function ProductDetail({ params }: { params: { id: string } }) {
-  const productId = Number.parseInt(params.id, 10);
+export default function ProductDetail() {
+  const { id } = useParams(); // Use useParams to get the dynamic id
+  const productId = id ? Number.parseInt(Array.isArray(id) ? id[0] : id, 10) : Number.NaN;
   const product = products.find((p) => p.id === productId);
 
   const [recommendedProducts, setRecommendedProducts] = useState<{ id: number; name: string; category: string; price: number; }[]>([]);
