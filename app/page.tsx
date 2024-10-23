@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 
@@ -28,7 +30,7 @@ export default function Home() {
     model.fit(trainingData, outputData, { epochs: 50 }).then(() => {
       console.log('Model trained');
     });
-  }, []);
+  }, [model, trainingData, outputData]);
 
   const handleTopicClick = async (topic: string) => {
     const userInput = tf.tensor2d([topics.map(t => (t === topic ? 1 : 0))]);
@@ -49,7 +51,7 @@ export default function Home() {
       <h1>AI-Powered Personalization</h1>
       <p>Select your preferred content topic:</p>
       {topics.map((topic) => (
-        <button key={topic} onClick={() => handleTopicClick(topic)}>
+        <button key={topic} type="button" onClick={() => handleTopicClick(topic)}>
           {topic}
         </button>
       ))}
